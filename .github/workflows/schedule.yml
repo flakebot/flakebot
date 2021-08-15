@@ -1,0 +1,16 @@
+name: Repo Dispatch Scheduler
+on:
+    schedule:
+        # https://crontab.guru/every-hour
+        - cron: 0 0 * * *
+    # trigger workflow manually for testing
+    workflow_dispatch: {}
+
+jobs:
+    update:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v2.4.0
+            - run: npm ci && npm run build
+            - run: node lib/scripts/notify.js

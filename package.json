@@ -17,6 +17,7 @@
         "test": "jest"
     },
     "dependencies": {
+        "@octokit/app": "^12.0.3",
         "@types/shelljs": "^0.8.9",
         "probot": "^11.0.1",
         "shelljs": "^0.8.4"
