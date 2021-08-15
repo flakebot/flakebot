@@ -12,5 +12,13 @@ jobs:
         steps:
             - uses: actions/checkout@v2
             - uses: actions/setup-node@v2.4.0
-            - run: npm ci && npm run build
-            - run: node lib/scripts/notify.js
+            - name: install dependencies
+              run: npm ci
+            - name: compile
+              run: npm run build
+            - name: run repo_dispatch notifier
+              env: 
+                APP_ID: ${{ secrets.APP_ID }}
+                CLIENT_ID: ${{ secrets.CLIENT_ID }}
+                PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+              run: node lib/scripts/notify.js
