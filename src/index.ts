@@ -3,41 +3,41 @@ import * as shell from "shelljs";
 const FLAKEBOT_BRANCH = "flakebot";
 const FLAKEBOT_USERNAME = "flakebot";
 const FLAKEBOT_EMAIL = "flakebot[bot]@users.noreply.github.com";
-let APP_TOKEN: string;
-let DEFAULT_BRANCH: string;
 
 export = (app: Probot) => {
     app.on(["issues", "repository_dispatch"], async (context) => {
-        if (!APP_TOKEN) {
-            APP_TOKEN = (
-                (await context.octokit.auth({
-                    type: "installation",
-                })) as any
-            ).token;
-        }
+        const token = (
+            (await context.octokit.auth({
+                type: "installation",
+            })) as any
+        ).token;
 
         const { owner, repo } = context.repo();
-        const repoDir = cloneRepo(owner, repo);
+        const repoDir = cloneRepo(token, owner, repo);
         update(repoDir);
         cleanupRepo(repoDir);
 
         const pr = context.pullRequest({
             body: "Automatic flake update request",
         });
-        await context.octokit.pulls.create({
-            head: FLAKEBOT_BRANCH,
-            base: "main",
-            repo: pr.repo,
-            owner: pr.owner,
-            title: "Update Flake Inputs",
-        });
+        const repoData = await context.octokit.repos.get(pr);
+        const baseBranch =
+            repoData.data.default_branch ??
+            repoData.data.master_branch ??
+            "main";
+        try {
+            await context.octokit.pulls.create({
+                head: FLAKEBOT_BRANCH,
+                base: baseBranch,
+                repo: pr.repo,
+                owner: pr.owner,
+                title: "Update Flake Inputs",
+            });
+        } catch (e) {
+            console.error(e);
+            console.log("pull request already exists. aborting...");
+        }
     });
-
-    // For more information on building apps:
-    // https://probot.github.io/docs/
-
-    // To get your app running against GitHub, see:
-    // https://probot.github.io/docs/development/
 };
 
 function mkTempDir(name: string): string {
@@ -48,27 +48,30 @@ function mkTempDir(name: string): string {
     return dir;
 }
 
-function setUserInfo() {
-    shell.exec(`git config user.name ${FLAKEBOT_USERNAME}`);
-    shell.exec(`git config user.email ${FLAKEBOT_EMAIL}`);
-}
-
-function cloneRepo(owner: string, repo: string): string {
+function cloneRepo(token: string, owner: string, repo: string): string {
     const dir = mkTempDir(`${owner}_${repo}`);
-    const cmd = `git clone https://x-access-token:${APP_TOKEN}@github.com/${owner}/${repo}.git ${dir}`;
-    shell.echo(cmd);
+    const cmd = `git clone https://x-access-token:${token}@github.com/${owner}/${repo}.git ${dir}`;
+    shell.echo(`cloning ${owner}/${repo} to ${dir}`);
     shell.exec(cmd);
     return dir;
 }
 
-function cleanupRepo(dir: string): void {
-    shell.rm("-rf", [dir]);
+function cleanupRepo(repoPath: string): void {
+    shell.echo(`removing ${repoPath}`);
+    shell.rm("-rf", [repoPath]);
 }
 
 function update(repoPath: string): void {
     shell.cd(repoPath);
-    setUserInfo();
+
+    shell.echo(`setting username: ${FLAKEBOT_USERNAME}`);
+    shell.exec(`git config user.name ${FLAKEBOT_USERNAME}`);
+
+    shell.echo(`setting email: ${FLAKEBOT_EMAIL}`);
+    shell.exec(`git config user.email ${FLAKEBOT_EMAIL}`);
+
     const cmd = `git checkout -B ${FLAKEBOT_BRANCH} && nix flake update --commit-lock-file && git push -u origin ${FLAKEBOT_BRANCH}`;
+    shell.echo("updating flake inputs");
     shell.echo(cmd);
     shell.exec(cmd);
 }
