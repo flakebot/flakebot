@@ -70,7 +70,7 @@ function update(repoPath: string): void {
     shell.echo(`setting email: ${FLAKEBOT_EMAIL}`);
     shell.exec(`git config user.email ${FLAKEBOT_EMAIL}`);
 
-    const cmd = `git checkout -B ${FLAKEBOT_BRANCH} && nix flake update --commit-lock-file && git push -u origin ${FLAKEBOT_BRANCH}`;
+    const cmd = `git checkout -B ${FLAKEBOT_BRANCH} && nix flake update --commit-lock-file && git push --force -u origin ${FLAKEBOT_BRANCH}`;
     shell.echo("updating flake inputs");
     shell.echo(cmd);
     shell.exec(cmd);
