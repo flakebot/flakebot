@@ -14,7 +14,7 @@
     "scripts": {
         "build": "tsc",
         "start": "probot run ./lib/index.js",
-        "start:build": "npm run build && probot run ./lib/index.js",
+        "dev": "tsc-watch --onSuccess 'probot run ./lib/index.js'",
         "test": "jest"
     },
     "dependencies": {
@@ -30,6 +30,7 @@
         "nock": "^13.0.5",
         "smee-client": "^1.2.2",
         "ts-jest": "^26.4.4",
+        "tsc-watch": "^4.4.0",
         "typescript": "^4.1.3"
     },
     "engines": {
