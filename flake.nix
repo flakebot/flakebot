@@ -13,6 +13,7 @@
         buildInputs = with pkgs; [
           nixUnstable
           nodejs
+          google-cloud-sdk
         ];
       };
     });

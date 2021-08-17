@@ -13,7 +13,8 @@
     ],
     "scripts": {
         "build": "tsc",
-        "start": "npm run build && probot run ./lib/index.js",
+        "start": "probot run ./lib/index.js",
+        "start:build": "npm run build && probot run ./lib/index.js",
         "test": "jest"
     },
     "dependencies": {

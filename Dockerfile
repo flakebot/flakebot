@@ -5,10 +5,10 @@ RUN nix-channel --update
 RUN nix-env -iA nixpkgs.nixUnstable
 RUN nix-env -iA nixpkgs.nodejs
 
-WORKDIR /usr/src/app
-COPY package.json package-lock.json ./
-RUN npm ci --production
-RUN npm cache clean --force
-ENV NODE_ENV="production"
+WORKDIR /app
 COPY . .
+RUN npm ci
+RUN npm run build
+
+EXPOSE 3000
 CMD [ "npm", "start" ]
