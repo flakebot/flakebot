@@ -2,10 +2,10 @@ import { Probot } from "probot";
 import * as shell from "shelljs";
 const FLAKEBOT_BRANCH = "flakebot";
 const FLAKEBOT_USERNAME = "flakebot";
-const FLAKEBOT_EMAIL = "flakebot[bot]@users.noreply.github.com";
+const FLAKEBOT_EMAIL = "flakebot@users.noreply.github.com";
 
 export = (app: Probot) => {
-    app.on(["issues", "repository_dispatch"], async (context) => {
+    app.on(["repository_dispatch"], async (context) => {
         const token = (
             (await context.octokit.auth({
                 type: "installation",

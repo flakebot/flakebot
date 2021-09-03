@@ -1,10 +1,11 @@
 name: Repo Dispatch Scheduler
 on:
     schedule:
-        # https://crontab.guru/every-hour
-        - cron: 0 0 * * *
+        # run daily at a random time since 0:00 tends
+        # to get delayed by github scheduling
+        - cron: 20 4 * * *
     # trigger workflow manually for testing
-    workflow_dispatch: {}
+    workflow_dispatch:
 
 jobs:
     update:
@@ -17,7 +18,7 @@ jobs:
             - name: compile
               run: npm run build
             - name: run repo_dispatch notifier
-              env: 
+              env:
                 APP_ID: ${{ secrets.APP_ID }}
                 CLIENT_ID: ${{ secrets.CLIENT_ID }}
                 PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
