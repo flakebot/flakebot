@@ -1,8 +1,8 @@
 import { Probot } from "probot";
 import * as shell from "shelljs";
 const FLAKEBOT_BRANCH = "flakebot";
-const FLAKEBOT_USERNAME = "flakebot";
-const FLAKEBOT_EMAIL = "flakebot@users.noreply.github.com";
+const FLAKEBOT_USERNAME = "flakebot[bot]";
+const FLAKEBOT_EMAIL = "flakebot[bot]@users.noreply.github.com";
 
 export = (app: Probot) => {
     app.on(["repository_dispatch"], async (context) => {
