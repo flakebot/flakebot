@@ -23,7 +23,7 @@ export class AwsStack extends cdk.Stack {
       {
         cluster: cluster, // Required
         cpu: 512, // Default is 256
-        desiredCount: 6, // Default is 1
+        desiredCount: 1,
         taskImageOptions: {
           image: ecs.ContainerImage.fromRegistry("kclejeune/flakebot:latest"),
         },
