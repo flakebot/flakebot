@@ -5,7 +5,7 @@ import * as Aws from '../lib/aws-stack';
 test('Empty Stack', () => {
     const app = new cdk.App();
     // WHEN
-    const stack = new Aws.AwsStack(app, 'MyTestStack');
+    const stack = new Aws.FlakebotStack(app, 'MyTestStack');
     // THEN
     expectCDK(stack).to(matchTemplate({
       "Resources": {}

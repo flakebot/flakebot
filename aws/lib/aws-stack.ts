@@ -4,7 +4,7 @@ import * as ecs from "@aws-cdk/aws-ecs";
 import * as ecs_patterns from "@aws-cdk/aws-ecs-patterns";
 import * as path from "path";
 
-export class AwsStack extends cdk.Stack {
+export class FlakebotStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
@@ -26,6 +26,10 @@ export class AwsStack extends cdk.Stack {
         desiredCount: 1,
         taskImageOptions: {
           image: ecs.ContainerImage.fromRegistry("kclejeune/flakebot:latest"),
+          environment: {
+            PORT: process.env.PORT || "8080",
+            APP_ID: process.env.APP_ID || "12345",
+          },
         },
         memoryLimitMiB: 2048, // Default is 512
         publicLoadBalancer: true, // Default is false
