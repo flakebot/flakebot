@@ -40,7 +40,7 @@ export = (app: Probot) => {
 
 function mkTempDir(name: string): string {
   const currentTime = new Date().getTime();
-  const dir = `~/.local/tmp/${name}_${currentTime}`;
+  const dir = `/tmp/flakebot/${name}_${currentTime}`;
   shell.echo(`creating ${dir}`);
   shell.mkdir("-p", dir);
   return dir;
@@ -68,8 +68,11 @@ function update(repoPath: string): void {
   shell.echo(`setting email: ${FLAKEBOT_EMAIL}`);
   shell.exec(`git config user.email ${FLAKEBOT_EMAIL}`);
 
-  const cmd = `git checkout -B ${FLAKEBOT_BRANCH} && nix flake update --commit-lock-file && git push --force -u origin ${FLAKEBOT_BRANCH}`;
+  const commands = [
+    `git checkout -B ${FLAKEBOT_BRANCH}`,
+    `nix flake update --commit-lock-file`,
+    `git push --force -u origin ${FLAKEBOT_BRANCH}`,
+  ];
   shell.echo("updating flake inputs");
-  shell.echo(cmd);
-  shell.exec(cmd);
+  shell.exec(commands.join(" && "));
 }
