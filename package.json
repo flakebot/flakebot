@@ -1,39 +1,41 @@
 {
-    "name": "flakebot",
-    "version": "1.0.0",
-    "private": true,
-    "description": "A Probot app",
-    "author": "Kennan LeJeune <kennan@case.edu>",
-    "license": "ISC",
-    "homepage": "https://github.com/kclejeune/flakebot",
-    "keywords": [
-        "probot",
-        "github",
-        "probot-app"
-    ],
-    "scripts": {
-        "build": "tsc",
-        "start": "probot run ./lib/src/index.js",
-        "dev": "tsc-watch --onSuccess 'npm start'",
-        "test": "jest"
-    },
-    "dependencies": {
-        "@octokit/app": "^12.0.5",
-        "@types/shelljs": "^0.8.11",
-        "shelljs": "^0.8.5"
-    },
-    "devDependencies": {
-        "@types/jest": "^28.1.1",
-        "@types/node": "^17.0.42",
-        "jest": "^28.1.1",
-        "nock": "^13.2.6",
-        "probot": "^12.2.4",
-        "smee-client": "^1.2.3",
-        "ts-jest": "^28.0.4",
-        "tsc-watch": "^5.0.3",
-        "typescript": "^4.7.3"
-    },
-    "engines": {
-        "node": ">= 14.0.0"
-    }
+  "name": "flakebot",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A Probot app",
+  "author": "Kennan LeJeune <kennan@case.edu>",
+  "license": "ISC",
+  "homepage": "https://github.com/kclejeune/flakebot",
+  "keywords": [
+    "probot",
+    "github",
+    "probot-app"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "start": "probot run ./lib/src/index.js",
+    "dev": "tsc-watch --onSuccess 'npm start'",
+    "test": "jest",
+    "format": "prettier --write '**/*.{ts,js,json}'"
+  },
+  "dependencies": {
+    "@octokit/app": "^12.0.5",
+    "@types/shelljs": "^0.8.11",
+    "shelljs": "^0.8.5"
+  },
+  "devDependencies": {
+    "@types/jest": "^28.1.1",
+    "@types/node": "^17.0.42",
+    "jest": "^28.1.1",
+    "nock": "^13.2.6",
+    "prettier": "^2.6.2",
+    "probot": "^12.2.4",
+    "smee-client": "^1.2.3",
+    "ts-jest": "^28.0.4",
+    "tsc-watch": "^5.0.3",
+    "typescript": "^4.7.3"
+  },
+  "engines": {
+    "node": ">= 14.0.0"
+  }
 }
